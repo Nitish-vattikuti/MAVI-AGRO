@@ -5,7 +5,7 @@ import fs from 'fs';
 
 // Check if the current workspace is in iCloud Drive
 const isICloud = process.cwd().includes('Mobile Documents/com~apple~CloudDocs');
-let dbPath = path.join(process.cwd(), 'agro_database.db');
+let dbPath = process.env.DATABASE_PATH || path.join(process.cwd(), 'agro_database.db');
 
 if (isICloud) {
     const localDir = path.join(os.homedir(), '.agro');

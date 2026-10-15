@@ -1,26 +1,162 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FDFBF7;
+  --foreground: #1A3C34;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-outfit);
+
+  /* Premium Brand Colors */
+  --color-brand-dark: #0F2A22;
+  --color-brand-primary: #1C6B48;
+  --color-brand-secondary: #D4F5E1;
+  --color-brand-accent: #E58E26;
+  --color-brand-cream: #F8F6F1;
+
+  --color-glass-shop: rgba(255, 255, 255, 0.7);
+  --color-glass-card: rgba(255, 255, 255, 0.03);
+
+  /* Premium Shadows */
+  --shadow-soft: 0 8px 30px -4px rgba(0, 0, 0, 0.08);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px rgba(28, 107, 72, 0.15);
+
+  /* Radii */
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0F2A22;
+    --foreground: #F8F6F1;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-outfit), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Scrollbar Utilities */
+.no-scrollbar,
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox, Chrome 121+, Safari 18.2+ */
+}
+
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Custom Sleek Scrollbar for Desktop */
+@media (min-width: 769px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(28, 107, 72, 0.2);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(28, 107, 72, 0.4);
+  }
+}
+
+/* Remove all scrollbars everywhere in mobile view */
+@media (max-width: 768px) {
+  html,
+  body,
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  *::-webkit-scrollbar {
+    display: none !important;
+    width: 0px !important;
+    height: 0px !important;
+    background: transparent !important;
+  }
+}
+
+@keyframes dot-fall {
+
+  /* Start on top of 'I' - Hold */
+  0%,
+  20% {
+    transform: translate(-0.275em, -0.85em);
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 1);
+    opacity: 1;
+  }
+
+  /* Jump Up/Out (Apex of Arc) */
+  35% {
+    transform: translate(-0.17em, -1.35em);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  /* Land on Ground */
+  55% {
+    transform: translate(0, 0);
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 1);
+  }
+
+  /* First Bounce (High) */
+  70% {
+    transform: translate(0, -0.4em);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  /* Land */
+  85% {
+    transform: translate(0, 0);
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 1);
+  }
+
+  /* Second Bounce (Small) */
+  92% {
+    transform: translate(0, -0.15em);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  /* Settle */
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.animate-dot-fall {
+  display: inline-block;
+  animation: dot-fall 2.5s linear forwards;
+  will-change: transform;
+}
+
+/* Utilities for Glassmorphism */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }

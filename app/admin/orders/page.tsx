@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { orderService } from '@/services/OrderService';
 import { Order, OrderStatus } from '@/data/types';
-import { exportOrdersToExcel } from '@/utils/export';
+import OrderExportModal from '@/components/admin/OrderExportModal';
 import { Search, FileSpreadsheet, CheckCircle, XCircle, Clock, ChevronDown, ShoppingBag, Trash2, Printer } from 'lucide-react';
 import { format, isSameDay, subDays, startOfMonth, endOfMonth, isWithinInterval, parseISO, startOfDay, endOfDay } from 'date-fns';
 
@@ -17,6 +17,7 @@ export default function AdminOrdersPage() {
     const [customStartDate, setCustomStartDate] = useState('');
     const [customEndDate, setCustomEndDate] = useState('');
     const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
+    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
     const loadOrders = useCallback(async () => {
         const data = await orderService.getAllOrders();
@@ -85,10 +86,6 @@ export default function AdminOrdersPage() {
         }
     };
 
-    const handleExport = () => {
-        exportOrdersToExcel(filteredOrders);
-    };
-
     const toggleExpand = (id: string) => {
         setExpandedOrderId(expandedOrderId === id ? null : id);
     };
@@ -111,11 +108,12 @@ export default function AdminOrdersPage() {
                         <span>Clear Data</span>
                     </button>
                     <button
-                        onClick={handleExport}
-                        className="flex items-center space-x-2 bg-green-600 text-white px-6 py-2.5 rounded-full hover:bg-green-700 transition shadow-lg shadow-green-200 font-bold text-xs uppercase tracking-wider"
+                        onClick={() => setIsExportModalOpen(true)}
+                        className="flex items-center space-x-2 bg-emerald-600 text-white px-6 py-2.5 rounded-full hover:bg-emerald-700 transition shadow-lg shadow-emerald-200 font-bold text-xs uppercase tracking-wider"
+                        title="Open spreadsheet preview and download orders"
                     >
                         <FileSpreadsheet size={18} />
-                        <span>Export Excel</span>
+                        <span>Preview & Export</span>
                     </button>
                 </div>
             </div>
@@ -345,6 +343,24 @@ export default function AdminOrdersPage() {
                     ))
                 )}
             </div>
+
+            {/* Interactive Spreadsheet Preview & OS-Aware Export Modal */}
+            <OrderExportModal
+                isOpen={isExportModalOpen}
+                onClose={() => setIsExportModalOpen(false)}
+                orders={filteredOrders}
+                filterSummary={
+                    dateFilter === 'all'
+                        ? 'All dates'
+                        : dateFilter === 'today'
+                        ? 'Today'
+                        : dateFilter === 'yesterday'
+                        ? 'Yesterday'
+                        : dateFilter === 'this_month'
+                        ? 'This month'
+                        : 'Custom date range'
+                }
+            />
         </div>
     );
 }
